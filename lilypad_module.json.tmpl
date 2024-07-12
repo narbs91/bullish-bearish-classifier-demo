@@ -1,0 +1,45 @@
+{
+  "machine": {
+    "gpu": 1,
+    "cpu": 1000,
+    "ram": 100
+  },
+  "job": {
+    "APIVersion": "V1beta1",
+    "Spec": {
+      "Deal": {
+        "Concurrency": 1
+      },
+      "Docker": {
+        "Entrypoint": [
+          "python3",
+          "inference.py"
+        ],
+        "EnvironmentVariables": [
+          {{ if .STATEMENT }}"{{ subst "STATEMENT=%s" .STATEMENT }}"{{else}}"STATEMENT=Lilypad is Awesome"{{ end }},
+          "HF_HUB_OFFLINE=1"
+        ],
+        "Image": "narbs91/bullish-bearish-classifier-demo:latest@sha256:sha256:705e499bcbdeb14e99b81a9c27c3b047c248f604505e005699b8d5c3acf132be"
+      },
+      "Engine": "Docker",
+      "Network": {
+        "Type": "None"
+      },
+      "Outputs": [
+          {
+            "Name": "outputs",
+            "StorageSource": "IPFS",
+            "Path": "/outputs"
+          }
+      ],
+      "PublisherSpec": {
+        "Type": "IPFS"
+      },
+      "Resources": {
+        "GPU": "1"
+      },
+      "Timeout": 1800,
+      "Verifier": "Noop"
+    }
+  }
+}
